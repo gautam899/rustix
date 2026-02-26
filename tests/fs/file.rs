@@ -12,6 +12,7 @@ use core::num::NonZeroU64;
 #[cfg(not(target_os = "redox"))]
 #[test]
 fn test_file() {
+    #[cfg(not(target_os = "vxworks"))]
     rustix::fs::accessat(
         rustix::fs::CWD,
         "Cargo.toml",
@@ -22,7 +23,7 @@ fn test_file() {
 
     rustix::fs::chown("Cargo.toml", None, None).unwrap();
 
-    #[cfg(not(any(target_os = "android", target_os = "emscripten")))]
+    #[cfg(not(any(target_os = "android", target_os = "emscripten", target_os = "vxworks")))]
     #[allow(unreachable_patterns)]
     match rustix::fs::accessat(
         rustix::fs::CWD,
@@ -49,7 +50,7 @@ fn test_file() {
 
     // Check that `SYMLINK_FOLLOW` is rejected. Except on NetBSD which seems to
     // permit it.
-    #[cfg(not(target_os = "netbsd"))]
+    #[cfg(not(any(target_os = "netbsd", target_os = "vxworks")))]
     assert_eq!(
         rustix::fs::accessat(
             rustix::fs::CWD,
@@ -99,6 +100,7 @@ fn test_file() {
         target_os = "espidf",
         target_os = "haiku",
         target_os = "solaris",
+        target_os = "vxworks",
     )))]
     rustix::fs::fadvise(&file, 0, NonZeroU64::new(10), rustix::fs::Advice::Normal).unwrap();
 
@@ -152,7 +154,7 @@ fn test_file() {
         assert!(statfs.f_blocks > 0);
     }
 
-    #[cfg(not(any(target_os = "redox", target_os = "wasi")))]
+    #[cfg(not(any(target_os = "redox", target_os = "wasi", target_os = "vxworks")))]
     {
         let statvfs = rustix::fs::fstatvfs(&file).unwrap();
         assert!(statvfs.f_frsize > 0);

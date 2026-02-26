@@ -1,3 +1,4 @@
+#[cfg(not(target_os = "vxworks"))]
 #[test]
 fn test_dir_read_from() {
     let t = rustix::fs::openat(
@@ -138,6 +139,7 @@ fn test_dir_seek() {
     assert_eq!(entries, entries2);
 }
 
+#[cfg(not(target_os = "vxworks"))]
 #[test]
 fn test_dir_new() {
     let t = rustix::fs::openat(

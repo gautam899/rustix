@@ -27,10 +27,12 @@ mod invalid_offset;
 mod ioctl;
 mod linkat;
 mod long_paths;
-#[cfg(not(any(target_os = "haiku", target_os = "wasi")))]
+#[cfg(not(any(target_os = "haiku", target_os = "wasi", target_os = "vxworks")))]
 mod makedev;
 mod mkdirat;
+#[cfg(not(target_os = "vxworks"))]
 mod mknodat;
+#[cfg(not(target_os = "vxworks"))]
 mod negative_timestamp;
 #[cfg(linux_kernel)]
 mod openat;
@@ -45,12 +47,12 @@ mod seals;
 mod seek;
 mod special;
 mod stat;
-#[cfg(not(any(target_os = "haiku", target_os = "redox", target_os = "wasi")))]
+#[cfg(not(any(target_os = "haiku", target_os = "redox", target_os = "wasi", target_os = "vxworks")))]
 mod statfs;
 #[cfg(linux_kernel)]
 mod statx;
 mod symlinkat;
-#[cfg(not(any(solarish, target_os = "redox", target_os = "wasi")))]
+#[cfg(not(any(solarish, target_os = "redox", target_os = "wasi", target_os = "vxworks")))]
 mod sync;
 mod utimensat;
 #[cfg(any(apple, linux_kernel))]
